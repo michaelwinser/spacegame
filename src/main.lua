@@ -1,7 +1,14 @@
+ROCK = 1
+SHIP = 2
+		
 function love.draw()
 	love.graphics.print("SPACEGAME", 400, 400)
 	for i,body in ipairs(bodies) do
-		love.graphics.circle("line", body.x, body.y, 10)
+		if body.bodyType == ROCK then
+			love.graphics.circle("line", body.x, body.y, 10)
+		else
+			love.graphics.circle("fill", body.x, body.y, 10)
+		end
 	end
 end
 
@@ -14,11 +21,23 @@ end
 function love.load()
 	bodies = {}
 	for i=1,10 do
-		bodies[i]=createBody(math.random(love.graphics.getWidth()), 
-			math.random(love.graphics.getHeight()), 
-			createRandom(), createRandom(),
-		0, 0)
+		bodies[i] = createRock()
 	end
+	bodies[11]=createShip()
+	ship = bodies[11]
+end
+
+function createShip()
+	return createBody(love.graphics.getWidth() / 2, 
+		love.graphics.getHeight() / 2,
+	0, 0, SHIP, 0)
+end
+
+function createRock()
+	return createBody(math.random(love.graphics.getWidth()), 
+		math.random(love.graphics.getHeight()), 
+		createRandom(), createRandom(),
+	ROCK, 0)
 end
 
 function createBody(x, y, dx, dy, bodyType, size)
