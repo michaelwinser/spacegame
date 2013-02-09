@@ -16,7 +16,7 @@ function love.load()
 	for i=1,10 do
 		bodies[i]=createBody(math.random(love.graphics.getWidth()), 
 			math.random(love.graphics.getHeight()), 
-			math.random(11)-6, math.random(11)-6,
+			createRandom(), createRandom(),
 		0, 0)
 	end
 end
@@ -30,6 +30,14 @@ function createBody(x, y, dx, dy, bodyType, size)
 	body.bodyType = bodyType
 	body.size = size
 	return body
+end
+
+function createRandom ()
+	local randNum=0
+	while (randNum==0) do
+		randNum=math.random(11)-6
+	end
+	return randNum
 end
 
 function updateBody(body)
@@ -47,4 +55,10 @@ function updateBody(body)
 	if body.y >= love.graphics.getHeight() then
 		body.dy = -body.dy
 	end	
+end
+
+function love.keypressed(key, unicode)
+	if key == 'q' then
+		love.event.push("quit")
+	end
 end
