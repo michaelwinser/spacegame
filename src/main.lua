@@ -79,5 +79,16 @@ end
 function love.keypressed(key, unicode)
 	if key == 'q' then
 		love.event.push("quit")
+	elseif key == 'w' then
+		ship.dy = ship.dy - 5
+	elseif key == 'a' then
+		ship.dx = ship.dx - 5
+	elseif key == 's' then
+		ship.dy = ship.dy + 5
+	elseif key == 'd' then
+		ship.dx = ship.dx + 5
+	elseif key == 'e' then
+		ship.dx = 0
+		ship.dy = 0
 	end
 end
