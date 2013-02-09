@@ -35,4 +35,16 @@ end
 function updateBody(body)
 	body.x = body.x + body.dx
 	body.y = body.y + body.dy
+	if body.x <= 0 then
+		body.dx = -body.dx
+	end
+	if body.x >= love.graphics.getWidth() then
+		body.dx = -body.dx
+	end
+		if body.y <= 0 then
+		body.dy = -body.dy
+	end
+	if body.y >= love.graphics.getHeight() then
+		body.dy = -body.dy
+	end	
 end
