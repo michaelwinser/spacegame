@@ -13,6 +13,17 @@ function love.draw()
 end
 
 function love.update()
+	
+	if love.keyboard.isDown('w') then
+		ship.dy = ship.dy - 0.1
+	elseif love.keyboard.isDown('a') then
+		ship.dx = ship.dx - 0.1
+	elseif love.keyboard.isDown('s') then
+		ship.dy = ship.dy + 0.1
+	elseif love.keyboard.isDown('d') then
+		ship.dx = ship.dx + 0.1
+	end
+	
 	for i,body in ipairs(bodies) do 
 		updateBody(body)
 	end
@@ -79,14 +90,6 @@ end
 function love.keypressed(key, unicode)
 	if key == 'q' then
 		love.event.push("quit")
-	elseif key == 'w' then
-		ship.dy = ship.dy - 5
-	elseif key == 'a' then
-		ship.dx = ship.dx - 5
-	elseif key == 's' then
-		ship.dy = ship.dy + 5
-	elseif key == 'd' then
-		ship.dx = ship.dx + 5
 	elseif key == 'e' then
 		ship.dx = 0
 		ship.dy = 0
