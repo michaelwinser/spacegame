@@ -1,9 +1,12 @@
 ROCK = 1
 SHIP = 2
 		
+WHITE = { red=255, green=255, blue=255, alpha=255}
+GREEN = { red=0, green=255, blue=0, alpha=255}
 function love.draw()
 	love.graphics.print("SPACEGAME", 400, 400)
 	for i,body in ipairs(bodies) do
+		love.graphics.setColor(body.color.red, body.color.green, body.color.blue, body.color.alpha)
 		if body.bodyType == ROCK then
 			love.graphics.circle("fill", body.x, body.y, body.size)
 		else
@@ -31,12 +34,28 @@ function love.update()
 end
 
 function love.load()
+
+	-- testloader()
+	normalloader()
+
+end
+
+function testloader()
 	bodies = {}
-	for i=1,2 do
+
+	bodies[1] = createBody(100, 0, 0, 0, ROCK, 50, WHITE )
+	bodies[2] = createBody(150, 0, 0, 0, ROCK, 50, WHITE )
+--	bodies[3] = createBody(300, 0, 1, 0, ROCK, 50, GREEN ) */
+end
+
+function normalloader()
+
+	bodies = {}
+	for i=1,10 do
 		bodies[i] = createRock()
 	end
-	bodies[3] = createShip()
-	ship = bodies[3]
+	bodies[11] = createShip()
+	ship = bodies[11]
 end
 
 function createShip()
@@ -105,6 +124,10 @@ function detectCollisions()
 				if hasCollided(body1, body2) then
 					body1.color = {red = math.random(255), green = math.random(255), blue = math.random(255), alpha = body1.color.alpha}
 					body2.color = {red = math.random(255), green = math.random(255), blue = math.random(255), alpha = body2.color.alpha}
+					print(body1.color.red, body1.color.green, body1.color.blue)
+					print(body2.color.red, body2.color.green, body2.color.blue)
+				else
+					print("No collision")
 				end
 			end
 		end
@@ -114,10 +137,16 @@ end
 function hasCollided(body1, body2)
 	local distanceX = body1.x - body2.x
 	local distanceY = body1.y - body2.y
-	distanceX = distanceX * distanceX
-	distanceY = distanceY * distanceY
 	local collisionDistance = body1.size + body2.size
-	print(collisionDistance)
-	return (collisionDistance * collisionDistance) < (distanceX + distanceY)
+	local collision = (distanceX * distanceX + distanceY * distanceY) < (collisionDistance * collisionDistance)
+--	print("body1", body1.x, body1.y, body1.size)
+--	print("body2", body2.x, body2.y, body2.size)
+--	print("collisionDistance", collisionDistance)
+--	print("dx", distanceX)
+--	print("dy", distanceY)
+--	print("dx2 + dy2", distanceX * distanceX + distanceY * distanceY)
+--	print("collisionDistance2", collisionDistance * collisionDistance)
+	print("collided", collision )
+	return collision;
 end
 	
