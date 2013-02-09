@@ -5,9 +5,9 @@ function love.draw()
 	love.graphics.print("SPACEGAME", 400, 400)
 	for i,body in ipairs(bodies) do
 		if body.bodyType == ROCK then
-			love.graphics.circle("line", body.x, body.y, 10)
+			love.graphics.circle("fill", body.x, body.y, body.size)
 		else
-			love.graphics.circle("fill", body.x, body.y, 10)
+			love.graphics.circle("line", body.x, body.y, body.size)
 		end
 	end
 end
@@ -27,31 +27,32 @@ function love.update()
 	for i,body in ipairs(bodies) do 
 		updateBody(body)
 	end
+	detectCollisions()
 end
 
 function love.load()
 	bodies = {}
-	for i=1,10 do
+	for i=1,2 do
 		bodies[i] = createRock()
 	end
-	bodies[11]=createShip()
-	ship = bodies[11]
+	bodies[3] = createShip()
+	ship = bodies[3]
 end
 
 function createShip()
 	return createBody(love.graphics.getWidth() / 2, 
 		love.graphics.getHeight() / 2,
-	0, 0, SHIP, 0)
+	0, 0, SHIP, 10, {red=255, green=255, blue=255, alpha=127})
 end
 
 function createRock()
 	return createBody(math.random(love.graphics.getWidth()), 
 		math.random(love.graphics.getHeight()), 
 		createRandom(), createRandom(),
-	ROCK, 0)
+	ROCK, 20, {red=255, green=255, blue=255, alpha=127})
 end
 
-function createBody(x, y, dx, dy, bodyType, size)
+function createBody(x, y, dx, dy, bodyType, size, color)
 	body = {}
 	body.x = x
 	body.y = y
@@ -59,6 +60,7 @@ function createBody(x, y, dx, dy, bodyType, size)
 	body.dy = dy
 	body.bodyType = bodyType
 	body.size = size
+	body.color = color
 	return body
 end
 
@@ -84,7 +86,7 @@ function updateBody(body)
 	end
 	if body.y >= love.graphics.getHeight() then
 		body.dy = -body.dy
-	end	
+	end
 end
 
 function love.keypressed(key, unicode)
@@ -95,3 +97,27 @@ function love.keypressed(key, unicode)
 		ship.dy = 0
 	end
 end
+
+function detectCollisions()
+	for i,body1 in ipairs(bodies) do
+		for j,body2 in ipairs(bodies) do
+			if i ~= j then
+				if hasCollided(body1, body2) then
+					body1.color = {red = math.random(255), green = math.random(255), blue = math.random(255), alpha = body1.color.alpha}
+					body2.color = {red = math.random(255), green = math.random(255), blue = math.random(255), alpha = body2.color.alpha}
+				end
+			end
+		end
+	end
+end
+
+function hasCollided(body1, body2)
+	local distanceX = body1.x - body2.x
+	local distanceY = body1.y - body2.y
+	distanceX = distanceX * distanceX
+	distanceY = distanceY * distanceY
+	local collisionDistance = body1.size + body2.size
+	print(collisionDistance)
+	return (collisionDistance * collisionDistance) < (distanceX + distanceY)
+end
+	
