@@ -57,7 +57,8 @@ function normalloader()
 	for i=1,rockCount do
 		bodies[i] = createRock()
 	end
-	ship = bodies[rockCount + 1] = createShip()
+	ship = createShip()
+  bodies[rockCount+1] = ship
 	ship.image = love.graphics.newImage("ship.png");
 	ship.size = ship.image:getWidth() / 2;
 end
