@@ -17,7 +17,9 @@ function love.draw()
 	for i,body in ipairs(bodies) do
 		if false or body.image ~= nil then
 			love.graphics.setColor(255, 255, 255, 255)
-			love.graphics.draw(body.image, body.x, body.y, body.angle, 1  , 1, body.image:getWidth() / 2, body.image:getHeight() / 2)
+      
+      local scale = body.size / body.image:getWidth() * 2
+			love.graphics.draw(body.image, body.x, body.y, body.angle, scale , scale, body.image:getWidth() / 2, body.image:getHeight() / 2)
 		end
     
     love.graphics.setColor(body.color.red, body.color.green, body.color.blue, body.color.alpha)
@@ -78,7 +80,7 @@ function createRock()
 	local rock = createBody(math.random(love.graphics.getWidth()), 
 		math.random(love.graphics.getHeight()), 
 		createRandom(), createRandom(),
-	ROCK, 20, {red=255, green=255, blue=255, alpha=64})
+	ROCK, math.random(10, 30), {red=255, green=255, blue=255, alpha=64})
 
   rock.image = ROCKIMAGE
 
