@@ -7,6 +7,7 @@ GREEN = { red=0, green=255, blue=0, alpha=255}
 debugship = false;
 
 function love.draw()
+  love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.print("SPACEGAME", 400, 400)
   if debugship then
     love.graphics.setColor(255, 255, 255, 255)
@@ -14,7 +15,7 @@ function love.draw()
   end
   
 	for i,body in ipairs(bodies) do
-		if body.image ~= nil then
+		if false or body.image ~= nil then
 			love.graphics.setColor(255, 255, 255, 255)
 			love.graphics.draw(body.image, body.x, body.y, body.angle, 1  , 1, body.image:getWidth() / 2, body.image:getHeight() / 2)
 		end
@@ -36,6 +37,8 @@ function love.update()
 end
 
 function love.load()
+  SHIPIMAGE = love.graphics.newImage("ship.png")
+  ROCKIMAGE = love.graphics.newImage("rock.png")
 
 	-- testloader()
 	normalloader()
@@ -45,6 +48,7 @@ end
 function testloader()
 	bodies = {}
 
+
 	bodies[1] = createBody(100, 0, 0, 0, ROCK, 50, WHITE )
 	bodies[2] = createBody(150, 0, 0, 0, ROCK, 50, WHITE )
 --	bodies[3] = createBody(300, 0, 1, 0, ROCK, 50, GREEN ) */
@@ -53,26 +57,32 @@ end
 function normalloader()
 
 	bodies = {}
-  local rockCount = 11
+  local rockCount = 5
 	for i=1,rockCount do
 		bodies[i] = createRock()
 	end
 	ship = createShip()
   bodies[rockCount+1] = ship
-	ship.image = love.graphics.newImage("ship.png");
-	ship.size = ship.image:getWidth() / 2;
 end
 
 function createShip()
-	return createBody(love.graphics.getWidth() / 2, 
+	local ship = createBody(love.graphics.getWidth() / 2, 
 		love.graphics.getHeight() / 2,	0, 0, SHIP, 10, {red=255, green=255, blue=255, alpha=127})
+	ship.image = SHIPIMAGE
+	ship.size = ship.image:getWidth() / 2;
+
+  return ship
 end
 
 function createRock()
-	return createBody(math.random(love.graphics.getWidth()), 
+	local rock = createBody(math.random(love.graphics.getWidth()), 
 		math.random(love.graphics.getHeight()), 
 		createRandom(), createRandom(),
-	ROCK, 20, {red=255, green=255, blue=255, alpha=127})
+	ROCK, 20, {red=255, green=255, blue=255, alpha=64})
+
+  rock.image = ROCKIMAGE
+
+  return rock;
 end
 
 function createBody(x, y, dx, dy, bodyType, size, color)
@@ -133,11 +143,13 @@ function love.keypressed(key, unicode)
   elseif key == '.' then
     debugship = not debugship
   elseif key == "up" then
-    ship.thrust = ship.thrust + 0.1
+    ship.thrust = math.min(ship.thrust + 0.05, 1)
+  elseif key == "down" then
+    ship.thrust = math.max(ship.thrust - 0.05, 0)
   elseif key == "right" then
-    ship.dr = math.min(ship.dr + 0.01, 0.02)
+    ship.dr = math.min(ship.dr + 0.025, 0.04)
   elseif key == "left" then
-    ship.dr = math.max(ship.dr - 0.01, -0.02)
+    ship.dr = math.max(ship.dr - 0.025, -0.04)
 	end
 end
 
