@@ -118,16 +118,16 @@ function updateBody(body)
 	body.y = body.y + body.dy
 	body.angle = body.angle + body.dr;
 	if body.x <= body.size then
-		body.dx = -body.dx
+		body.dx = -body.dx * 0.9
 	end
 	if body.x >= love.graphics.getWidth() - body.size then
-		body.dx = -body.dx
+		body.dx = -body.dx * 0.9
 	end
 		if body.y <= body.size then
-		body.dy = -body.dy
+		body.dy = -body.dy * 0.9
 	end
 	if body.y >= love.graphics.getHeight() - body.size then
-		body.dy = -body.dy
+		body.dy = -body.dy *0.9
 	end
 end
 
@@ -149,9 +149,9 @@ function love.keypressed(key, unicode)
   elseif key == "down" then
     ship.thrust = math.max(ship.thrust - 0.05, 0)
   elseif key == "right" then
-    ship.dr = math.min(ship.dr + 0.025, 0.04)
+    ship.dr = math.min(ship.dr + 0.025, 0.05)
   elseif key == "left" then
-    ship.dr = math.max(ship.dr - 0.025, -0.04)
+    ship.dr = math.max(ship.dr - 0.025, -0.05)
 	end
 end
 
